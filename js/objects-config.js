@@ -434,7 +434,11 @@ ispy.event_description = {
     "Jets_V1": {
 	type: ispy.SHAPE, on: false, group: "Physics", name: "Jets (Reco)",
 	fn: ispy.makeJet, style: {color: "rgb(100%, 50%, 0%)", opacity: 0.75}, selection: {"min_et": 10.0}
-    },
+	},
+	"PFTaus_V1": {
+	type: ispy.SHAPE, on: false, group: "Physics", name: "Taus (Reco)",
+	fn: ispy.makeTau, style: {color: "rgb(100%, 50%, 0%)", opacity: 0.75}, selection: {"min_pt": 10.0}
+	},
     "PFJets_V1": {
 	type: ispy.SHAPE, on: false, group: "Physics", name: "Jets (PF)",
 	fn: ispy.makeJet, style: {color: "rgb(100%, 50%, 0%)", opacity: 0.6}, selection: {"min_et": 10.0}
