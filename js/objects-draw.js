@@ -1585,6 +1585,58 @@ ispy.makeJet = function(data, style, selection) {
 
 };
 
+ispy.makeTau = function(data, style, selection) {
+    var pt = data[2];
+    var eta = data[0];
+
+    var theta = data[4];
+    var phi = data[1];
+    
+    var ct = Math.cos(theta);
+    var st = Math.sin(theta);
+    var cp = Math.cos(phi);
+    var sp = Math.sin(phi);
+
+    var maxZ = 2.25;
+    var maxR = 1.10;
+    
+    var length1 = ct ? maxZ / Math.abs(ct) : maxZ;
+    var length2 = st ? maxR / Math.abs(st) : maxR;
+    var length = length1 < length2 ? length1 : length2;
+    var radius = 0.3 * (1.0 /(1 + 0.001));
+    
+    // radiusTop, radiusBottom, height, radialSegments, heightSegments, openEnded
+    var geometry = new THREE.CylinderGeometry(radius,0.0,length,16,1,true);
+    geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,length*0.5,0));
+    geometry.applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI/2));
+    
+    var jcolor = new THREE.Color(style.color);
+
+    var transp = false;
+    
+    if ( style.opacity < 1.0 ) {
+    
+	transp = true;
+  
+    }
+
+    var material = new THREE.MeshBasicMaterial({color:jcolor, transparent: transp, opacity:style.opacity});
+    material.side = THREE.DoubleSide;
+    
+    var tau = new THREE.Mesh(geometry, material);
+    tau.lookAt(new THREE.Vector3(length*0.5*st*cp, length*0.5*st*sp, length*0.5*ct));
+    tau.visible = true;
+
+    if ( pt < selection.min_pt ) {
+    
+	tau.visible = false;
+  
+    }
+  
+    return tau;
+
+};
+
 ispy.makePhoton = function(data, style, selection) {
     /*
       Draw a line representing the inferred photon trajectory from the vertex (IP?) to the extent of the ECAL
